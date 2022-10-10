@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import ListItem from '../components/ListItem';
+import { useItemSelectionContext } from '../context/ItemSelectionContext';
 import { Item } from '../pages';
 
 type Props = {
@@ -7,10 +9,18 @@ type Props = {
 
 const List = (props: Props) => {
 
-  const list = props.items.map((item, index) => {
-    console.log(item);
+  const {select, deselect} = useItemSelectionContext();
 
-    return <ListItem key={index} id={String(item.key)} content={item.content} />
+  const list = props.items.map((item) => {
+    const id = String(item.key);
+
+    return <ListItem
+      key={id}
+      id={id}
+      content={item.content}
+      select={select}
+      deselect={deselect}
+    />
   });
 
   return (

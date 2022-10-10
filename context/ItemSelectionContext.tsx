@@ -1,23 +1,21 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { generateContext } from "./helpers/Context";
 
 const ctx = () => {
 
   const [selected, setSelected] = useState<string[]>([]);
 
-  const select = (id: string): void => {
-    const updatedSelection: string[] = [...selected, id];
-    setSelected(updatedSelection);
-  }
+  const select = useCallback((id: string) => {
+    setSelected(selected => [...selected, id]);
+  }, []);
 
-  const deselect = (id: string): void => {
-    const updatedSelection: string[] = selected.filter(value => value !== id);
-    setSelected(updatedSelection);
-  }
+  const deselect = useCallback((id: string) => {
+    setSelected(selected => selected.filter(value => value !== id));
+  }, []);
 
-  const includes = (id: string): boolean => {
+  const includes = useCallback((id: string): boolean => {
     return selected.includes(id);
-  }
+  }, []);
 
   return {
     selected,

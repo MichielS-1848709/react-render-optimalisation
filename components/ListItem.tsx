@@ -1,27 +1,32 @@
-import { FunctionComponent, useState } from 'react'
-import { useItemSelectionContext } from '../context/ItemSelectionContext'
+import { memo, useEffect, useState } from 'react';
+import { useItemSelectionContext } from '../context/ItemSelectionContext';
+
+// https://staleclosures.dev/preventing-list-rerenders/
 
 type Props = {
   id: string
 	content: string;
+	select: (id: string) => void;
+	deselect: (id: string) => void;
 };
 
-const ListItem = (props: Props) => {
+const ListItem = memo((props: Props) => {
 
-	// State
-	const {select, deselect, includes} = useItemSelectionContext();
+	const [isSelected, setIsSelected] = useState(false);
 
 	// Handlers
 	const handleClick = () => {
-		if (includes(props.id)) {
-			deselect(props.id);
+		if (isSelected) {
+			setIsSelected(false);
+			props.deselect(props.id);
 		} else {
-			select(props.id);
+			setIsSelected(true);
+			props.select(props.id);
 		}
 	}
 
 	// Text
-	const buttonName = includes(props.id) ? "Deselect" : "Select";
+	const buttonName = isSelected ? "Deselect" : "Select";
 
   return (
     <li key={props.id}>
@@ -29,6 +34,6 @@ const ListItem = (props: Props) => {
 			<button onClick={handleClick}>{buttonName}</button>
     </li>
   )
-}
+})
 
-export default ListItem
+export default ListItem;
